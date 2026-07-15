@@ -5,9 +5,13 @@ $doc = new DOMDocument;
 $doc->load('coffee.xml');
 $xpath = new DOMXPath($doc);
 $input = $_POST['search'];
-$query = "/Coffees/Coffee[@ID='".$input."']";
-#$result = isset($xpath->query($query)) ? $xpath->query($query) : '';
-$result = $xpath->query($query);
+$sanitizedInput = preg_replace("/[^0-9]/", "", $input);
+if ($sanitizedInput === '' || $sanitizedInput !== $input) {
+    $result = array();
+} else {
+    $query = "/Coffees/Coffee[@ID='".$sanitizedInput."']";
+    $result = $xpath->query($query);
+}
 }
 ?>
 <div class="thumbnail">
