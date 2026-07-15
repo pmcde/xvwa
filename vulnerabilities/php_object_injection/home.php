@@ -35,7 +35,7 @@ jection">https://www.owasp.org/index.php/PHP_Object_Injection</a></p></strong>
                             }
                             if(isset($_REQUEST['r'])){  
 
-                                $var1=unserialize($_REQUEST['r']);
+                                $var1=json_decode($_REQUEST['r'], true);
                                 
 
                                 if(is_array($var1)){ 
