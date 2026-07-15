@@ -53,17 +53,20 @@
                                 echo "<li class=\"cross\">Error! Can not use both search and itemcode option. Search using either of these optoins.</li>";
                                 echo "</ul>";
                             }else if($item){
-                                $sql = "select * from caffaine where itemid = ".$item;
-                                $result = $conn->query($sql);
+                                $stmt = $conn1->prepare("SELECT * FROM caffaine WHERE itemid = ?");
+                                $stmt->execute([$item]);
+                                $result = $stmt;
                                 $isSearch = true;
                             }else if($search){
-                                $sql = "SELECT * FROM caffaine WHERE itemname LIKE '%" . $search . "%' OR itemdesc LIKE '%" . $search . "%' OR categ LIKE '%" . $search . "%'";
-                                $result = $conn->query($sql);
+                                $searchParam = "%" . $search . "%";
+                                $stmt = $conn1->prepare("SELECT * FROM caffaine WHERE itemname LIKE ? OR itemdesc LIKE ? OR categ LIKE ?");
+                                $stmt->execute([$searchParam, $searchParam, $searchParam]);
+                                $result = $stmt;
                                 $isSearch = true;
                             }
                             if($isSearch){
                                 echo "<table>";
-                                while($rows = $result->fetch_assoc()){
+                                while($rows = $result->fetch(PDO::FETCH_ASSOC)){
                                     echo "<tr><td><b>Item Code : </b>".$rows['itemcode']."</td><td rowspan=5>&nbsp;&nbsp;</td><td rowspan=5 valign=\"top\" align=\"justify\"><b>Description : </b>".$rows['itemdesc']."</td></tr>";
                                     echo "<tr><td><b>Item Name : </b>".$rows['itemname']."</td></tr>";
                                     echo "<td><img src='".$rows['itemdisplay']."' height=130 weight=20/></td>";
