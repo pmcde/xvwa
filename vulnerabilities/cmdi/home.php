@@ -35,11 +35,11 @@
                 if($target){
                     if (stristr(php_uname('s'), 'Windows NT')) { 
             
-                    $cmd = shell_exec( 'ping  ' . $target );
+                    $cmd = shell_exec( 'ping  ' . escapeshellarg($target) );
                     echo '<pre>'.$cmd.'</pre>';
 
                     } else { 
-                        $cmd = shell_exec( 'ping  -c 3 ' . $target );
+                        $cmd = shell_exec( 'ping  -c 3 ' . escapeshellarg($target) );
                         echo '<pre>'.$cmd.'</pre>';
                     }
                 }
