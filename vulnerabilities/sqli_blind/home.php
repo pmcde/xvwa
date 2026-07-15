@@ -51,15 +51,20 @@
                                 echo "<li class=\"cross\">Error! Can not use both search and itemcode option. Search using either of these optoins.</li>";
                                 echo "</ul>";
                             }else if($item){
-                                $sql = "select * from caffaine where itemid = ".$item;
-                                $result = $conn->query($sql);
+                                $stmt = $conn->prepare("select * from caffaine where itemid = ?");
+                                $stmt->bind_param("i", $item);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
                                 $rowcount = $result->num_rows;
                                 if($rowcount>0){
                                     $isSearch = true;
                                 }
                             }else if($search){
-                                $sql = "SELECT * FROM caffaine WHERE itemname LIKE '%" . $search . "%' OR itemdesc LIKE '%" . $search . "%' OR categ LIKE '%" . $search . "%'";
-                                $result = $conn->query($sql);
+                                $stmt = $conn->prepare("SELECT * FROM caffaine WHERE itemname LIKE ? OR itemdesc LIKE ? OR categ LIKE ?");
+                                $searchParam = "%" . $search . "%";
+                                $stmt->bind_param("sss", $searchParam, $searchParam, $searchParam);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
                                 $rowcount = $result->num_rows;
                                 if($rowcount>0){
                                     $isSearch = true;
